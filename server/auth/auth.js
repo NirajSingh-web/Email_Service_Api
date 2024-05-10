@@ -91,4 +91,42 @@ router.post(
     }
   }
 );
+router.put(
+  "/reset/password",
+  [check("Email").isEmail(), check("password").isLength({ min: 5 })],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const { Email, password } = req.body;
+      const userdata = await (await userschema()).findOne({ Email: Email });
+      if (!userdata) {
+        return res.status(409).json("user not Found");
+      }
+      const salt = await bcryt.genSalt(10);
+      const hashedpassword = await bcryt.hash(password, salt);
+      const updateuserdata = await userschema().updateOne(
+        {
+          _id: userdata._id,
+        },
+        {
+          $set: {
+            Email: Email,
+            password: hashedpassword,
+          },
+        }
+      );
+      if (updateuserdata) {
+        return res.status(200).json({
+          success: true,
+          msg: "Succesfully Reset",
+        });
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+);
 module.exports = router;

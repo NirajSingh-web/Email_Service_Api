@@ -3,25 +3,27 @@ const transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
     user: "nirajsingh41412@gmail.com",
-    pass: "Changer@&123",
+    pass: "frjz viov uktd bfoq",
+  },
+  tls: {
+    rejectUnauthorized: true,
   },
 });
 const sendEmailMiddleware = (req, res, next) => {
-  const { Sender, Subject, Description, Receipt } = req.body;
+  const { Subject, Description, Receiver } = req.body;
   const mailOptions = {
-    from: Sender || "nirajsingh41412@gmail.com",
-    to: Receipt,
+    from: "nirajsingh41412@gmail.com",
+    to: Receiver,
     subject: Subject,
     text: Description,
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log("Error occurred:", error.message);
-      res.status(500).send("Error occurred while sending email");
+      return res.status(500).send("Error occurred while sending email");
     } else {
-      console.log("Email sent successfully!");
       req.body.messageId = info.messageId;
-      console.log("Message ID:", info.messageId);
+      req.body.Sender = "nirajsingh41412@gmail.com";
       next();
     }
     console.log(req.body);

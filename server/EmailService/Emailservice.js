@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const { fetchuser } = require("../middleware/fetchuser");
-const { EmailserviceSchema } = require("../database connection/schema");
+const {
+  EmailserviceSchema,
+  userschema,
+} = require("../database connection/schema");
 const e = require("express");
 const sendEmailMiddleware = require("./Nodemail");
 router.get("/get/data:_id", fetchuser, async (req, res) => {
@@ -17,14 +20,14 @@ router.get("/get/data:_id", fetchuser, async (req, res) => {
 router.post(
   "/add/data",
   [
-    check("Email").isEmail(),
+    check("Receiver").isEmail(),
     check("Subject").isLength({ min: 2 }),
     check("Description").isLength({ min: 2 }),
     fetchuser,
     sendEmailMiddleware,
   ],
   async (req, res) => {
-    console.log(req.body)
+    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors.array());
@@ -52,35 +55,49 @@ router.post(
     }
   }
 );
-// router.put("/update/data",[
-//     check("Email").isEmail(),
-//     check("Subject").isLength({ min: 5 }),
-//     check("Description").isLength({ min: 2 }),
-//     fetchuser,
-//   ],async(req,res)=>{
-//     const errors = validationResult(req).formatWith();
-//     if (!errors.isEmpty()) {
-//       return res.status(400).send(errors.array());
-//     }
-//     try {
-//       const userid = req.users._id;
-//       const data = (await EmailserviceSchema())({
-//         Createdby: userid,
-//         ...req.body,
-//       });
-//       const savedata = await data.save();
-//       if (save) {
-//         return res.status(201).json({
-//           message: "Data added Successfully!",
-//         });
-//       } else {
-//         return res.status(201).json({
-//           message: "Data not added",
-//         });
-//       }
-//     } catch (e) {
-//       res.status(401).json(e.message);
-//     }
-//   }
-// })
+router.put(
+  "/update/data",
+  [
+    check("Receiver").isEmail(),
+    check("Subject").isLength({ min: 2 }),
+    check("Description").isLength({ min: 30 }).withMessage("Atleast 30 Words"),
+    fetchuser,
+    sendEmailMiddleware,
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log(errors.array());
+      return res.status(400).send({ errors: errors.array() });
+    }
+    try {
+      console.log(req.body);
+      const update = await EmailserviceSchema().updateOne(
+        { _id: req.body._id },
+        {
+          $set: req.body,
+        }
+      );
+      if (update["acknowledged"]) {
+        res.status(201).json("Updated Successfully");
+      } else {
+        res.status(201).json("Not Updated Try After Some time");
+      }
+    } catch (e) {
+      res.status(401).json("Server Issue");
+    }
+  }
+);
+router.delete("/delete/data:_id", async (req, res) => {
+  try {
+    const deleteData = await (await EmailserviceSchema()).deleteOne(req.params);
+    if (deleteData["deletedCount"] != 0) {
+      res.status(200).json("Deleted Successfully!");
+    } else {
+      res.status(449).json("something went wrong");
+    }
+  } catch (e) {
+    console.log("error in deleting data==>", e.message);
+  }
+});
 module.exports = router;

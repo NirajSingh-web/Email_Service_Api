@@ -55,7 +55,7 @@ const EmailserviceSchema = () => {
       type: String,
       required: true,
     },
-    Receipt: {
+    Receiver: {
       type: String,
       required: true,
     },
