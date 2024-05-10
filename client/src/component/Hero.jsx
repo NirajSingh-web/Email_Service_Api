@@ -26,7 +26,8 @@ const Hero = () => {
       console.log(res);
       if (res.data) {
         alert(res.data);
-        userdetail && dispatch(FetchEmailServicedata(userdetail.currentUser._id));
+        userdetail &&
+          dispatch(FetchEmailServicedata(userdetail.currentUser._id));
       }
     } catch (e) {
       if (e.response.data.errors) {
@@ -38,7 +39,7 @@ const Hero = () => {
   };
   return (
     <div className="relative top-10 bg-[rgb(6,47,68)] p-5 max-sm:p-0 flex justify-between max-sm:justify-center jus w-[100%] flex-wrap gap-9 max-sm:gap-0">
-      {Array.isArray(EmailServices) &&
+      {Array.isArray(EmailServices) && EmailServices.length != 0 ? (
         EmailServices.map((e, i) => (
           <div className="" key={i}>
             <motion.div
@@ -83,10 +84,10 @@ const Hero = () => {
                       </div>
                       <div>
                         <p className="font-bold">Description,</p>
-                        <p className="ms-2 line-clamp-3">{e.Description}</p>
+                        <p className="ms-2 line-clamp-2">{e.Description}</p>
                       </div>
                     </div>
-                    <div className="border-t-2 border-[rgb(62,96,109)] pt-[12px] p-[20px] transition-all card-button">
+                    <div className="border-t-2 border-[rgb(62,96,109)] pt-[8px] p-[20px] transition-all card-button">
                       <div className="flex justify-between ">
                         <button
                           className="btn btn-primary"
@@ -111,7 +112,14 @@ const Hero = () => {
               </Tilt>
             </motion.div>
           </div>
-        ))}
+        ))
+      ) : (
+        <div className="card">
+          <div className="card-body">
+            <p>No data Found</p>
+          </div>
+        </div>
+      )}
       <UpdateEmaildata SelectedFormData={SelectedFormData} />
     </div>
   );

@@ -104,7 +104,7 @@ export default function Flowchart() {
     try {
       e.preventDefault();
       const res = await axios.post(
-        "https://emailserviceapi-production-f0a0.up.railway.app/emailService/add/data",
+        "http://localhost:3000/emailService/add/data",
         postData,
         { headers }
       );

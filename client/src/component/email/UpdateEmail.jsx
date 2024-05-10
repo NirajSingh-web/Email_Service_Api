@@ -20,7 +20,7 @@ const UpdateEmaildata = ({ SelectedFormData }) => {
     try {
       e.preventDefault();
       const res = await axios.put(
-        "https://emailserviceapi-production-f0a0.up.railway.app/emailService/update/data",
+        "http://localhost:3000/emailService/update/data",
         Formdata,
         { headers }
       );
@@ -66,7 +66,7 @@ const UpdateEmaildata = ({ SelectedFormData }) => {
                 />
                 <input
                   type="text"
-                  name="subject"
+                  name="Subject"
                   id="subject"
                   className="form-control mt-3"
                   placeholder="Subject"

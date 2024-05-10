@@ -18,7 +18,7 @@ function Login({ setisAuthenticated }) {
     try {
       e.preventDefault();
       const res = await axios.post(
-        "https://emailserviceapi-production-f0a0.up.railway.app/user/authenticate",
+        "http://localhost:3000/user/authenticate",
         Logindata
       );
       const data = res.data;

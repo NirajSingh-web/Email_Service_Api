@@ -32,7 +32,8 @@ function App() {
       } else {
         Navigate("/home");
       }
-      userdetail && dispatch(FetchEmailServicedata(userdetail.currentUser._id));
+      userdetail.currentUser != null &&
+        dispatch(FetchEmailServicedata(userdetail.currentUser._id))||console.log(userdetail.currentUser)
     } else {
       setisAuthenticated(false);
     }

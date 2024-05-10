@@ -14,7 +14,7 @@ const ForgetPassword = () => {
     try {
       e.preventDefault();
       const res = await axios.put(
-        "https://emailserviceapi-production-f0a0.up.railway.app/user//reset/password",
+        "http://localhost:3000/user//reset/password",
         UserData
       );
       const data = res.data;

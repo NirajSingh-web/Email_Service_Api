@@ -20,14 +20,15 @@ const SignUpData = ({ setisAuthenticated }) => {
     try {
       e.preventDefault();
       const res = await axios.post(
-        "https://emailserviceapi-production-f0a0.up.railway.app/user/signup",
+        "http://localhost:3000/user/signup",
         SignUpData
       );
       const data = res.data;
+      console.log(data);
       if (data.success) {
         alert(data.msg);
         setisAuthenticated(true);
-        Navigate("/");
+        Navigate("/home");
         localStorage.setItem("token", data.token);
         dispatch(setCurrentUser(data));
         dispatch(FetchEmailServicedata(data.userdetail._id));

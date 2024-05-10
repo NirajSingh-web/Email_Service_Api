@@ -9,7 +9,7 @@ const FetchEmailServicedata = createAsyncThunk(
         throw new Error("invalid token");
       }
       const response = await axios.get(
-        `https://emailserviceapi-production-f0a0.up.railway.app/emailService/get/data${userid}`,
+        `http://localhost:3000/emailService/get/data${userid}`,
         {
           headers: { Authorization: token },
         }
