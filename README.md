@@ -1,5 +1,5 @@
 Brief overview of the project, its purpose, and main features.
-Froentend
+Frontend
 Technologies Used
 
 React.js
