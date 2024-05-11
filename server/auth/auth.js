@@ -22,7 +22,6 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     try {
-      console.log(req.body);
       const { Email, password, First_Name, Last_Name } = req.body;
       const userdata = await (await userschema()).findOne({ Email: Email });
       if (userdata) {
@@ -30,18 +29,19 @@ router.post(
       }
       const salt = await bcryt.genSalt(10);
       const hashedpassword = await bcryt.hash(password, salt);
-      const saveuserdata = (await userschema())({
+      const saveuserdata = await userschema()({
         Email: Email,
         First_Name: First_Name,
         Last_Name: Last_Name,
         password: hashedpassword,
       });
       const save_data = await saveuserdata.save();
+      console.log(save_data);
       const userdetail = await userschema()
         .findOne({ _id: save_data._id })
         .select("-password");
-      if (save_data) {
-        const token = jwt.sign({ userid: save._id }, jwtsecret);
+      if (save_data && userdetail) {
+        const token = jwt.sign({ _id: save_data._id }, jwtsecret);
         return res.status(200).json({
           success: true,
           msg: "Succesfully added",
@@ -50,7 +50,7 @@ router.post(
         });
       }
     } catch (e) {
-      console.log(e.message);
+      console.log(e);
     }
   }
 );

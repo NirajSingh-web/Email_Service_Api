@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate,redirect } from "react-router-dom";
 import Navbar from "./component/Navbar";
 import Login from "./component/auth/Login";
 import Signup from "./component/auth/Singup";
@@ -38,7 +38,6 @@ function App() {
       setisAuthenticated(false);
     }
   }, [isAuthenticated, location.pathname]);
-  console.log(isAuthenticated);
   return (
     <>
       <Navbar

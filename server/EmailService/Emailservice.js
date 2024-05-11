@@ -4,7 +4,6 @@ const { check, validationResult } = require("express-validator");
 const { fetchuser } = require("../middleware/fetchuser");
 const {
   EmailserviceSchema,
-  userschema,
 } = require("../database connection/schema");
 const e = require("express");
 const sendEmailMiddleware = require("./Nodemail");
@@ -27,14 +26,14 @@ router.post(
     sendEmailMiddleware,
   ],
   async (req, res) => {
-    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors.array());
       return res.status(400).send({ errors: errors.array() });
     }
+    const userid = req.users._id;
+      console.log(userid)
     try {
-      const userid = req.users._id;
       const data = await EmailserviceSchema()({
         Createdby: userid,
         ...req.body,
